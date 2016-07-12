@@ -9,11 +9,16 @@ import javafx.scene.layout.Pane;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 import java.util.List;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.lang.NullPointerException;
 
 public class newUserController
 {
     private static Stage stage;
     private loginController parent;
+    private PasswordEncryptionService pes = new PasswordEncryptionService();
+    private Login login2;
     
     @FXML private Pane backgroundPane;
     @FXML private TextField fnID;
@@ -67,9 +72,18 @@ public class newUserController
             });
     }
     
-    @FXML   void submitClicked()
+    @FXML   void submitClicked() throws NoSuchAlgorithmException, InvalidKeySpecException
     {
-    
+            byte[] salt = pes.generateSalt();
+            byte[] password = pes.getEncryptedPassword(passID.getText(), salt);
+            String username = usernameID.getText();
+            System.out.println("Username = " + username + ", Password = " + password + ", salt = " + salt);
+            
+            login2.userID = username;
+            login2.password = password.toString();
+            login2.salt = salt.toString();
+            login2.addLogin();
+            
     }
     
     @FXML   void cancelClicked()

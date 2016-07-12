@@ -14,6 +14,7 @@ import java.util.List;
 public class loginController
 {
     private static Stage stage;
+    private Login login;
     
     @FXML private Pane backgroundPane;
     @FXML private TextField userID;
@@ -66,7 +67,28 @@ public class loginController
     
     @FXML   void loginClicked()
     {
-        
+        login = Login.getByUserId(userID.getText());
+        System.out.println("Password is " + login.password);
+        if(passID.getText().equals(login.password)){
+            System.out.println("New user button clicked");
+            FXMLLoader loader = new FXMLLoader(Application.class.getResource("MainMenuScene.fxml"));
+    
+            try
+            {
+                Stage stage3 = new Stage();
+                stage3.setTitle("Main Menu");
+                stage3.setScene(new Scene(loader.load()));
+                stage3.show();           
+                newUserController controller3 = loader.getController();
+                controller3.prepareStageEvents(stage3);
+            }
+            catch (Exception ex)
+            {
+                System.out.println(ex.getMessage());
+            }             
+        }else{
+            System.out.println("Login not verified");
+        }
     }
     
     @FXML   void cancelClicked()

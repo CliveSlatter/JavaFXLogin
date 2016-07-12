@@ -9,17 +9,19 @@ public class Login
     /* First, map each of the fields (columns) in your table to some public variables. */
     public String userID;
     public String password;
+    public String salt;
 
     /* Next, prepare a constructor that takes each of the fields as arguements. */
-    public Login(String userID, String password)
+    public Login(String userID, String password, String salt)
     {
         this.userID = userID;
         this.password = password;
+        this.salt = salt;
     }
 
     @Override public String toString()
     {
-        
+        return (userID + " " + password + " " + salt);
     }
 
     
@@ -39,7 +41,7 @@ public class Login
 
                 if (results != null)
                 {
-                    login = new Login(results.getString("userID"), results.getString("password"));
+                    login = new Login(results.getString("userID"), results.getString("password"), results.getString("salt"));
                 }
             }
         }
@@ -48,7 +50,7 @@ public class Login
             System.out.println("Database result processing error: " + resultsexception.getMessage());
         }
 
-        return books;
+        return login;
     }
     
     public void addLogin()
@@ -57,24 +59,19 @@ public class Login
         {
             PreparedStatement statement;
             
-            statement = Application.database.newStatement("SELECT userID FROM books ORDER BY ISBN DESC");
+            statement = Application.database.newStatement("SELECT userID FROM tblLogin ORDER BY userID DESC");
             ResultSet results = Application.database.runQuery(statement);
-            statement = Application.database.newStatement("INSERT INTO books (ISBN, title, authorfn, authorsn, year, genre, category, language, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");             
+            statement = Application.database.newStatement("INSERT INTO tblLogin (userID, password, salt) VALUES (?, ?, ?)");             
                         
+            statement.setString(1, userID);
+            statement.setString(2, password);
+            statement.setString(3, salt);
             
-            statement.setString(1, ISBN);
-            statement.setString(2, title);
-            statement.setString(3, authorfn);
-            statement.setString(4, authorsn);
-            statement.setInt(5, year);
-            statement.setString(6, genre);
-            statement.setString(7, category);
-            statement.setString(8, language);
-            statement.setFloat(9, rating);
+            System.out.println(statement);
             
             if (statement != null)
             {
-                Application.database.executeUpdate(statement);
+                Application.database.runQuery(statement);
             }
 
         }
@@ -90,18 +87,11 @@ public class Login
         {
             PreparedStatement statement;    
         
-            statement = Application.database.newStatement("SELECT ISBN FROM books ORDER BY ISBN DESC");
+            statement = Application.database.newStatement("SELECT userID FROM tblLogin ORDER BY userID DESC");
             ResultSet results = Application.database.runQuery(statement); 
-            statement = Application.database.newStatement("UPDATE books SET isbn = ?, title = ? authorfn = ? authorsn = ? year = ? genre = ? category = ? language = ? rating = ? WHERE id = ?");             
-            statement.setString(1, ISBN);
-            statement.setString(2, title);
-            statement.setString(3, authorfn);
-            statement.setString(4, authorsn);
-            statement.setInt(5, year);
-            statement.setString(6, genre);
-            statement.setString(7, category);
-            statement.setString(8, language);
-            statement.setFloat(9, rating);
+            statement = Application.database.newStatement("UPDATE tblLogin SET userID = ?, password = ? WHERE id = ?");             
+            statement.setString(1, userID);
+
             if (statement != null)
             {
                 Application.database.executeUpdate(statement);

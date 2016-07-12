@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.params=userID\ password\ salt
+comment0.target=Login(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment0.text=Next,\ prepare\ a\ constructor\ that\ takes\ each\ of\ the\ fields\ as\ arguements.
+comment1.params=
+comment1.target=java.lang.String\ toString()
+comment2.params=userID
+comment2.target=Login\ getByUserId(java.lang.String)
+comment3.params=
+comment3.target=void\ addLogin()
+comment4.params=
+comment4.target=void\ save()
+numComments=5

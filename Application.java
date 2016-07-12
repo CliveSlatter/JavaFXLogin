@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 
 public class Application
 {
+    public static DatabaseConnection database;
+    
     public static void main(String[] args)
     {
         JFXPanel panel = new JFXPanel();        
@@ -16,6 +18,8 @@ public class Application
     {
         try
         {         
+            database = new DatabaseConnection("SampleProject.db");
+            
             FXMLLoader loader = new FXMLLoader(Application.class.getResource("LoginScene.fxml"));
 
             Stage stage = new Stage();
