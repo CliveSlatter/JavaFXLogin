@@ -10,11 +10,14 @@ import javafx.scene.layout.Pane;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 import java.util.List;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 public class loginController
 {
     private static Stage stage;
-    private Login login;
+    private Login login = new Login("","","");
+    private PasswordEncryptionService pes;
     
     @FXML private Pane backgroundPane;
     @FXML private TextField userID;
@@ -65,14 +68,15 @@ public class loginController
             });
     }
     
-    @FXML   void loginClicked()
+    @FXML   void loginClicked() throws NoSuchAlgorithmException, InvalidKeySpecException
     {
         login = Login.getByUserId(userID.getText());
-        System.out.println("Password is " + login.password);
-        if(passID.getText().equals(login.password)){
-            System.out.println("New user button clicked");
+        byte[] pass = pes.password.getBytes();
+        byte[] salt = login.salt.getBytes();
+        if(pes.authenticate(passID.getText(), pass, salt))
+        {
+            System.out.println("Login verified");
             FXMLLoader loader = new FXMLLoader(Application.class.getResource("MainMenuScene.fxml"));
-    
             try
             {
                 Stage stage3 = new Stage();
@@ -85,11 +89,12 @@ public class loginController
             catch (Exception ex)
             {
                 System.out.println(ex.getMessage());
-            }             
+            }       
         }else{
             System.out.println("Login not verified");
         }
-    }
+    }        
+    
     
     @FXML   void cancelClicked()
     {

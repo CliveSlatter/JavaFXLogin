@@ -18,7 +18,7 @@ public class newUserController
     private static Stage stage;
     private loginController parent;
     private PasswordEncryptionService pes = new PasswordEncryptionService();
-    private Login login2;
+    private Login login2 = new Login("","","");
     
     @FXML private Pane backgroundPane;
     @FXML private TextField fnID;

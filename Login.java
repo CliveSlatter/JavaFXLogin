@@ -61,17 +61,16 @@ public class Login
             
             statement = Application.database.newStatement("SELECT userID FROM tblLogin ORDER BY userID DESC");
             ResultSet results = Application.database.runQuery(statement);
+            System.out.println(results);
             statement = Application.database.newStatement("INSERT INTO tblLogin (userID, password, salt) VALUES (?, ?, ?)");             
                         
             statement.setString(1, userID);
             statement.setString(2, password);
             statement.setString(3, salt);
             
-            System.out.println(statement);
-            
             if (statement != null)
             {
-                Application.database.runQuery(statement);
+                Application.database.executeUpdate(statement);
             }
 
         }
@@ -87,8 +86,8 @@ public class Login
         {
             PreparedStatement statement;    
         
-            statement = Application.database.newStatement("SELECT userID FROM tblLogin ORDER BY userID DESC");
-            ResultSet results = Application.database.runQuery(statement); 
+            //statement = Application.database.newStatement("SELECT userID FROM tblLogin ORDER BY userID DESC");
+            //ResultSet results = Application.database.runQuery(statement); 
             statement = Application.database.newStatement("UPDATE tblLogin SET userID = ?, password = ? WHERE id = ?");             
             statement.setString(1, userID);
 
